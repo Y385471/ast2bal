@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عيادة - نظام الاستقبال</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+
+:root {
+  --bg: #f0f4f8;
+  --white: #ffffff;
+  --primary: #1e3a5f;
+  --accent: #2563eb;
+  --accent2: #0ea5e9;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #1e293b;
+  --text2: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* NAV */
+.nav {
+  background: var(--primary);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.nav-title {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.nav-time {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.85rem;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 10px 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.68rem;
+  color: var(--text2);
+  transition: all 0.2s;
+}
+
+.nav-btn.active { color: var(--accent); }
+.nav-btn .icon { font-size: 1.4rem; }
+
+/* CONTENT */
+.content {
+  padding: 16px;
+  padding-bottom: 80px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* PAGE */
+.page { display: none; }
+.page.show { display: block; }
+
+/* CARDS */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-top: 4px;
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.form-label .required { color: var(--danger); }
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: white;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent);
+}
+
+.form-textarea { resize: none; }
+
+/* MULTI SELECT */
+.multi-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ms-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text2);
+}
+
+.ms-chip.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* BUTTONS */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+}
+
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-success { background: var(--success); color: white; }
+.btn-warning { background: var(--warning); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-outline { background: white; border: 1.5px solid var(--accent); color: var(--accent); }
+
+/* PATIENT LIST */
+.patient-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.patient-item:hover { border-color: var(--accent); }
+
+.patient-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.patient-info h3 { font-size: 0.92rem; font-weight: 700; }
+.patient-info p { font-size: 0.75rem; color: var(--text2); margin-top: 2px; }
+
+.patient-code {
+  margin-right: auto;
+  font-family: monospace;
+  font-size: 0.75rem;
+  background: var(--bg);
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* APPOINTMENT ITEM */
+.appt-item {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-right: 4px solid var(--accent);
+}
+
+.appt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.appt-name { font-size: 0.92rem; font-weight: 700; }
+.appt-time { font-size: 0.82rem; color: var(--accent); font-weight: 600; }
+
+.appt-details { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge-confirmed { background: #dcfce7; color: var(--success); }
+.badge-unconfirmed { background: #fef9c3; color: var(--warning); }
+.badge-replied { background: #dbeafe; color: var(--accent); }
+.badge-unreplied { background: #f1f5f9; color: var(--text2); }
+.badge-attended { background: #dcfce7; color: var(--success); }
+.badge-absent { background: #fee2e2; color: var(--danger); }
+.badge-pending { background: #f1f5f9; color: var(--text2); }
+
+.appt-actions { display: flex; gap: 6px; }
+
+.appt-btn {
+  flex: 1;
+  padding: 7px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* SERVICE ROW */
+.service-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.service-price {
+  width: 90px;
+  padding: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  text-align: center;
+  outline: none;
+}
+
+.remove-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #fee2e2;
+  color: var(--danger);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-service-btn {
+  padding: 9px 16px;
+  border: 1.5px dashed var(--accent);
+  background: transparent;
+  color: var(--accent);
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+/* TOTAL ROW */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.total-label { font-size: 0.85rem; color: var(--text2); font-weight: 600; }
+.total-value { font-size: 1rem; font-weight: 700; color: var(--primary); }
+.total-value.remaining { color: var(--danger); }
+.total-value.paid { color: var(--success); }
+
+/* SEARCH */
+.search-bar {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  background: white;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.search-bar:focus { border-color: var(--accent); }
+
+.search-wrapper { position: relative; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text2); }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.success { background: var(--success); color: white; }
+.toast.error { background: var(--danger); color: white; }
+.toast.show { opacity: 1; }
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 16px 0 8px;
+}
+
+/* EMPTY */
+.empty {
+  text-align: center;
+  padding: 30px;
+  color: var(--text2);
+  font-size: 0.88rem;
+}
+
+.empty .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
+
+/* VISIT HISTORY */
+.visit-item {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-right: 4px solid var(--success);
+}
+
+.visit-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.visit-date { font-size: 0.78rem; color: var(--text2); }
+.visit-total { font-size: 0.88rem; font-weight: 700; color: var(--primary); }
+.visit-services { font-size: 0.8rem; color: var(--text2); }
+
+/* LOADING */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--text2);
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* PATIENT MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+
+.info-label { color: var(--text2); font-weight: 600; }
+.info-value { color: var(--text); font-weight: 600; text-align: left; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-title">🦷 عيادة الاستقبال</div>
+  <div class="nav-time" id="navTime"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- DASHBOARD -->
+  <div class="page show" id="page-home">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="statToday">-</div>
+        <div class="stat-label">مواعيد اليوم</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statAttended">-</div>
+        <div class="stat-label">حضروا اليوم</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statAbsent">-</div>
+        <div class="stat-label">لم يحضروا</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statTotal">-</div>
+        <div class="stat-label">إجمالي المرضى</div>
+      </div>
+    </div>
+
+    <div class="section-title">مواعيد اليوم</div>
+    <div id="todayList">
+      <div class="loading"><div class="spinner"></div>جاري التحميل...</div>
+    </div>
+  </div>
+
+  <!-- NEW PATIENT -->
+  <div class="page" id="page-patient">
+    <div class="card">
+      <div class="card-title">👤 تسجيل مريض جديد</div>
+
+      <div class="form-group">
+        <label class="form-label">كود المريض <span class="required">*</span></label>
+        <input class="form-input" type="text" id="p_id" placeholder="مثال: 804" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">اسم المريض <span class="required">*</span></label>
+        <input class="form-input" type="text" id="p_name" placeholder="الاسم كامل" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">رقم التليفون <span class="required">*</span></label>
+        <input class="form-input" type="tel" id="p_phone" placeholder="01xxxxxxxxx" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">النوع <span class="required">*</span></label>
+        <div class="multi-select">
+          <div class="ms-chip" onclick="selectOne(this,'p_gender','ذكر')">ذكر</div>
+          <div class="ms-chip" onclick="selectOne(this,'p_gender','أنثى')">أنثى</div>
+        </div>
+        <input type="hidden" id="p_gender" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">تاريخ الميلاد</label>
+        <input class="form-input" type="date" id="p_birth" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">الوظيفة</label>
+        <input class="form-input" type="text" id="p_job" placeholder="الوظيفة" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">العنوان</label>
+        <input class="form-input" type="text" id="p_address" placeholder="المنطقة / المدينة" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">المشاكل الصحية</label>
+        <div class="multi-select" id="healthChips">
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','القلب')">القلب</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','السكر')">السكر</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','الروماتيزم')">الروماتيزم</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','السرطان')">السرطان</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','الكبد الوبائي')">الكبد الوبائي</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','غدة درقية')">غدة درقية</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','الضغط')">الضغط</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','سيولة الدم')">سيولة الدم</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','حمل')">حمل</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','التدخين')">التدخين</div>
+          <div class="ms-chip" onclick="toggleChip(this,'p_health','لا يوجد')">لا يوجد</div>
+        </div>
+        <input type="hidden" id="p_health" value="" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">طريقة معرفة العيادة</label>
+        <div class="multi-select">
+          <div class="ms-chip" onclick="selectOne(this,'p_source','Facebook')">Facebook</div>
+          <div class="ms-chip" onclick="selectOne(this,'p_source','Google')">Google</div>
+          <div class="ms-chip" onclick="selectOne(this,'p_source','Instagram')">Instagram</div>
+          <div class="ms-chip" onclick="selectOne(this,'p_source','اليافطة')">اليافطة</div>
+          <div class="ms-chip" onclick="selectOne(this,'p_source','عن طريق صديق')">عن طريق صديق</div>
+        </div>
+        <input type="hidden" id="p_source" />
+      </div>
+
+      <button class="btn btn-primary" onclick="savePatient()" id="savePatientBtn">💾 حفظ المريض</button>
+    </div>
+  </div>
+
+  <!-- VISIT -->
+  <div class="page" id="page-visit">
+    <div class="card">
+      <div class="card-title">📋 تسجيل زيارة</div>
+
+      <div class="form-group">
+        <label class="form-label">كود المريض <span class="required">*</span></label>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" type="text" id="v_patientId" placeholder="أدخل الكود" style="flex:1" />
+          <button class="btn btn-outline" style="width:auto;padding:10px 14px;margin:0" onclick="loadPatientForVisit()">بحث</button>
+        </div>
+      </div>
+
+      <div id="v_patientInfo" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:14px">
+        <div style="font-weight:700;color:var(--primary)" id="v_patientName2"></div>
+        <div style="font-size:0.8rem;color:var(--text2)" id="v_patientPhone2"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">كود الزيارة <span class="required">*</span></label>
+        <input class="form-input" type="text" id="v_id" placeholder="مثال: V1" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">الدكتور <span class="required">*</span></label>
+        <div class="multi-select">
+          <div class="ms-chip" onclick="selectOne(this,'v_doctor','د. يوسف')">د. يوسف</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_doctor','د. عمرو')">د. عمرو</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_doctor','د. سارة')">د. سارة</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_doctor','د. منة')">د. منة</div>
+        </div>
+        <input type="hidden" id="v_doctor" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">تاريخ الزيارة <span class="required">*</span></label>
+        <input class="form-input" type="date" id="v_date" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">الخدمات <span class="required">*</span></label>
+        <div id="servicesContainer"></div>
+        <button class="add-service-btn" onclick="addServiceRow()">+ إضافة خدمة</button>
+      </div>
+
+      <div class="total-row">
+        <div class="total-label">الإجمالي</div>
+        <div class="total-value" id="v_total">0 جنيه</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">المدفوع</label>
+        <input class="form-input" type="number" id="v_paid" placeholder="0" oninput="calcRemaining()" />
+      </div>
+
+      <div class="total-row">
+        <div class="total-label">المتبقي</div>
+        <div class="total-value remaining" id="v_remaining">0 جنيه</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">طريقة الدفع</label>
+        <div class="multi-select">
+          <div class="ms-chip" onclick="selectOne(this,'v_payment','كاش')">كاش</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_payment','فيزا')">فيزا</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_payment','انستاباي')">انستاباي</div>
+          <div class="ms-chip" onclick="selectOne(this,'v_payment','فودافون كاش')">فودافون كاش</div>
+        </div>
+        <input type="hidden" id="v_payment" />
+      </div>
+
+      <button class="btn btn-primary" onclick="saveVisit()" id="saveVisitBtn">💾 حفظ الزيارة</button>
+    </div>
+  </div>
+
+  <!-- APPOINTMENTS -->
+  <div class="page" id="page-appt">
+    <div class="card">
+      <div class="card-title">📅 حجز موعد جديد</div>
+
+      <div class="form-group">
+        <label class="form-label">كود المريض <span class="required">*</span></label>
+        <div style="display:flex;gap:8px">
+          <input class="form-input" type="text" id="a_patientId" placeholder="أدخل الكود" style="flex:1" />
+          <button class="btn btn-outline" style="width:auto;padding:10px 14px;margin:0" onclick="loadPatientForAppt()">بحث</button>
+        </div>
+      </div>
+
+      <div id="a_patientInfo" style="display:none;background:var(--bg);border-radius:10px;padding:12px;margin-bottom:14px">
+        <div style="font-weight:700;color:var(--primary)" id="a_patientName2"></div>
+        <div style="font-size:0.8rem;color:var(--text2)" id="a_patientPhone2"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">تاريخ الموعد <span class="required">*</span></label>
+        <input class="form-input" type="date" id="a_date" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">وقت الموعد <span class="required">*</span></label>
+        <input class="form-input" type="time" id="a_time" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ملاحظات</label>
+        <textarea class="form-textarea" id="a_notes" rows="2" placeholder="أي ملاحظات..."></textarea>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveAppointment()" id="saveApptBtn">💾 حفظ الموعد</button>
+    </div>
+
+    <div class="section-title">كل المواعيد</div>
+    <div id="allApptList">
+      <div class="loading"><div class="spinner"></div>جاري التحميل...</div>
+    </div>
+  </div>
+
+  <!-- PATIENTS LIST -->
+  <div class="page" id="page-patients">
+    <div class="search-wrapper">
+      <input class="search-bar" type="text" placeholder="ابحث بالاسم أو الكود..." oninput="filterPatients(this.value)" />
+      <span class="search-icon">🔍</span>
+    </div>
+    <div id="patientsList">
+      <div class="loading"><div class="spinner"></div>جاري التحميل...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="showPage('home',this)">
+    <span class="icon">🏠</span>الرئيسية
+  </button>
+  <button class="nav-btn" onclick="showPage('patient',this)">
+    <span class="icon">➕</span>مريض جديد
+  </button>
+  <button class="nav-btn" onclick="showPage('visit',this)">
+    <span class="icon">📋</span>زيارة
+  </button>
+  <button class="nav-btn" onclick="showPage('appt',this)">
+    <span class="icon">📅</span>مواعيد
+  </button>
+  <button class="nav-btn" onclick="showPage('patients',this)">
+    <span class="icon">👥</span>المرضى
+  </button>
+</div>
+
+<!-- PATIENT MODAL -->
+<div class="modal-overlay" id="patientModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalPatientName"></div>
+    <div id="modalPatientInfo"></div>
+    <div class="section-title" style="margin-top:16px">سجل الزيارات</div>
+    <div id="modalVisitHistory"></div>
+    <button class="btn btn-outline" style="margin-top:12px" onclick="closeModal()">إغلاق</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT = 'https://script.google.com/macros/s/AKfycbw6DNopb7LAnWu5McWGCKz-iD9S80KonuL0u1AXWXJ-TAOJtdicEQEv0aevC7vAflKRbw/exec';
+
+const SERVICES = [
+  'كشف','حشو عصب جلسة أولى','حشو عصب جلسة ثانية','حشو عصب جلسة ثالثة',
+  'خلع','خلع جراحي','طربوش زيركون','حشو عادي','تبييض',
+  'تنظيف جير وتلميع','حشو أطفال عادي','حشو أطفال عصب','طربوش أطفال',
+  'خلع أطفال','حافظ مسافة','خلع جراحي ضرس العقل','خلع ضرس العقل',
+  'تنظيف جير جلسة أو جلستين','تبييض شامل تنظيف وتلميع',
+  'بناء ضرس','تبييض بدون تنظيف وتلميع','الإشاعة'
+];
+
+let allPatients = [];
+let selectedHealth = [];
+let serviceCount = 0;
+
+// TIME
+function updateTime() {
+  const now = new Date();
+  document.getElementById('navTime').textContent = now.toLocaleTimeString('ar-EG', {hour:'2-digit',minute:'2-digit'});
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// TOAST
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// PAGES
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('show');
+  btn.classList.add('active');
+
+  if (page === 'home') loadDashboard();
+  if (page === 'patients') loadPatientsList();
+  if (page === 'appt') loadAllAppointments();
+  if (page === 'visit') {
+    initVisit();
+  }
+}
+
+// CHIPS
+function selectOne(el, field, val) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.ms-chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById(field).value = val;
+}
+
+function toggleChip(el, field, val) {
+  el.classList.toggle('selected');
+  const idx = selectedHealth.indexOf(val);
+  if (idx > -1) selectedHealth.splice(idx, 1);
+  else selectedHealth.push(val);
+  document.getElementById(field).value = selectedHealth.join(', ');
+}
+
+// DASHBOARD
+async function loadDashboard() {
+  try {
+    const [apptRes, patientsRes] = await Promise.all([
+      fetch(`${SCRIPT}?action=getTodayAppointments`),
+      fetch(`${SCRIPT}?action=getPatients`)
+    ]);
+    const apptData = await apptRes.json();
+    const patientsData = await patientsRes.json();
+
+    if (patientsData.success) {
+      allPatients = patientsData.data;
+      document.getElementById('statTotal').textContent = patientsData.data.length;
+    }
+
+    if (apptData.success) {
+      const appts = apptData.data;
+      document.getElementById('statToday').textContent = appts.length;
+      document.getElementById('statAttended').textContent = appts.filter(a => a['حضور المريض'] === 'حضر').length;
+      document.getElementById('statAbsent').textContent = appts.filter(a => a['حضور المريض'] === 'لم يحضر').length;
+      renderTodayAppts(appts);
+    }
+  } catch(e) {
+    document.getElementById('todayList').innerHTML = '<div class="empty">خطأ في التحميل</div>';
+  }
+}
+
+function renderTodayAppts(appts) {
+  const container = document.getElementById('todayList');
+  if (!appts.length) {
+    container.innerHTML = '<div class="empty"><div class="empty-icon">📅</div>لا توجد مواعيد اليوم</div>';
+    return;
+  }
+  container.innerHTML = appts.map((a, i) => `
+    <div class="appt-item">
+      <div class="appt-header">
+        <div class="appt-name">${a['اسم المريض']}</div>
+        <div class="appt-time">${a['وقت الموعد']}</div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text2);margin-bottom:8px">📞 ${a['رقم التليفون']}</div>
+      <div class="appt-details">
+        <span class="badge ${a['تأكيد الموعد']==='مؤكد'?'badge-confirmed':'badge-unconfirmed'}">${a['تأكيد الموعد']}</span>
+        <span class="badge ${a['تم الرد']==='تم الرد'?'badge-replied':'badge-unreplied'}">${a['تم الرد']}</span>
+        <span class="badge ${a['حضور المريض']==='حضر'?'badge-attended':a['حضور المريض']==='لم يحضر'?'badge-absent':'badge-pending'}">${a['حضور المريض']}</span>
+      </div>
+      <div class="appt-actions">
+        <button class="appt-btn" style="background:#dcfce7;color:var(--success)" onclick="updateAppt(${i},'confirmed',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">✓ تأكيد</button>
+        <button class="appt-btn" style="background:#dbeafe;color:var(--accent)" onclick="updateAppt(${i},'replied',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">📞 تم الرد</button>
+        <button class="appt-btn" style="background:#dcfce7;color:var(--success)" onclick="updateAppt(${i},'attended',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">✅ حضر</button>
+        <button class="appt-btn" style="background:#fee2e2;color:var(--danger)" onclick="updateAppt(${i},'attended',false,'${a['كود المريض']}','${a['تاريخ الموعد']}')">❌ لم يحضر</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// UPDATE APPOINTMENT
+async function updateAppt(idx, field, val, patientId, date) {
+  try {
+    await fetch(SCRIPT, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'updateAppointment', patientId, appointmentDate: date, [field]: val })
+    });
+    showToast('تم التحديث ✓');
+    loadDashboard();
+  } catch(e) { showToast('خطأ في التحديث', 'error'); }
+}
+
+// SAVE PATIENT
+async function savePatient() {
+  const id = document.getElementById('p_id').value.trim();
+  const name = document.getElementById('p_name').value.trim();
+  const phone = document.getElementById('p_phone').value.trim();
+  const gender = document.getElementById('p_gender').value;
+
+  if (!id || !name || !phone || !gender) {
+    showToast('برجاء ملء الحقول المطلوبة', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('savePatientBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الحفظ...';
+
+  try {
+    await fetch(SCRIPT, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'addPatient',
+        patientId: id, name, phone,
+        gender, job: document.getElementById('p_job').value,
+        birthdate: document.getElementById('p_birth').value,
+        address: document.getElementById('p_address').value,
+        health: document.getElementById('p_health').value || 'لا يوجد',
+        source: document.getElementById('p_source').value
+      })
+    });
+    showToast('تم حفظ المريض ✓');
+    resetPatientForm();
+  } catch(e) { showToast('خطأ في الحفظ', 'error'); }
+
+  btn.disabled = false;
+  btn.textContent = '💾 حفظ المريض';
+}
+
+function resetPatientForm() {
+  ['p_id','p_name','p_phone','p_job','p_address','p_birth'].forEach(id => document.getElementById(id).value = '');
+  ['p_gender','p_source','p_health'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.ms-chip').forEach(c => c.classList.remove('selected'));
+  selectedHealth = [];
+}
+
+// VISIT
+function initVisit() {
+  document.getElementById('servicesContainer').innerHTML = '';
+  serviceCount = 0;
+  addServiceRow();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('v_date').value = today;
+}
+
+function addServiceRow() {
+  serviceCount++;
+  const div = document.createElement('div');
+  div.className = 'service-row';
+  div.id = `sr-${serviceCount}`;
+  div.innerHTML = `
+    <select class="form-select" id="svc-${serviceCount}" onchange="calcTotal()">
+      <option value="">اختر الخدمة</option>
+      ${SERVICES.map(s => `<option value="${s}">${s}</option>`).join('')}
+    </select>
+    <input class="service-price" type="number" id="price-${serviceCount}" placeholder="السعر" oninput="calcTotal()" />
+    <button class="remove-btn" onclick="removeService(${serviceCount})">✕</button>
+  `;
+  document.getElementById('servicesContainer').appendChild(div);
+}
+
+function removeService(id) {
+  const el = document.getElementById(`sr-${id}`);
+  if (el) { el.remove(); calcTotal(); }
+}
+
+function calcTotal() {
+  let total = 0;
+  document.querySelectorAll('[id^="price-"]').forEach(el => {
+    total += parseFloat(el.value) || 0;
+  });
+  document.getElementById('v_total').textContent = total + ' جنيه';
+  calcRemaining();
+  return total;
+}
+
+function calcRemaining() {
+  const total = calcTotal();
+  const paid = parseFloat(document.getElementById('v_paid').value) || 0;
+  const remaining = total - paid;
+  const el = document.getElementById('v_remaining');
+  el.textContent = remaining + ' جنيه';
+  el.style.color = remaining > 0 ? 'var(--danger)' : 'var(--success)';
+}
+
+async function loadPatientForVisit() {
+  const id = document.getElementById('v_patientId').value.trim();
+  if (!id) return;
+  try {
+    const res = await fetch(`${SCRIPT}?action=getPatient&id=${id}`);
+    const json = await res.json();
+    if (json.success) {
+      document.getElementById('v_patientName2').textContent = json.data['اسم المريض'];
+      document.getElementById('v_patientPhone2').textContent = json.data['رقم التليفون'];
+      document.getElementById('v_patientInfo').style.display = 'block';
+    } else { showToast('المريض غير موجود', 'error'); }
+  } catch(e) { showToast('خطأ في البحث', 'error'); }
+}
+
+async function saveVisit() {
+  const patientId = document.getElementById('v_patientId').value.trim();
+  const visitId = document.getElementById('v_id').value.trim();
+  const doctor = document.getElementById('v_doctor').value;
+
+  if (!patientId || !visitId || !doctor) {
+    showToast('برجاء ملء الحقول المطلوبة', 'error');
+    return;
+  }
+
+  const services = [];
+  document.querySelectorAll('[id^="svc-"]').forEach((el, i) => {
+    const priceEl = document.getElementById(`price-${el.id.split('-')[1]}`);
+    if (el.value) services.push({ name: el.value, price: parseFloat(priceEl.value) || 0 });
+  });
+
+  if (!services.length) { showToast('أضف خدمة واحدة على الأقل', 'error'); return; }
+
+  const total = services.reduce((s, x) => s + x.price, 0);
+  const paid = parseFloat(document.getElementById('v_paid').value) || 0;
+  const patientName = document.getElementById('v_patientName2').textContent || '';
+
+  const btn = document.getElementById('saveVisitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الحفظ...';
+
+  try {
+    await fetch(SCRIPT, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'addVisit',
+        visitId, patientId, patientName,
+        doctor,
+        service1: services[0]?.name || '', price1: services[0]?.price || 0,
+        service2: services[1]?.name || '', price2: services[1]?.price || 0,
+        service3: services[2]?.name || '', price3: services[2]?.price || 0,
+        total, paid, remaining: total - paid,
+        paymentMethod: document.getElementById('v_payment').value,
+        visitDate: document.getElementById('v_date').value
+      })
+    });
+    showToast('تم حفظ الزيارة ✓');
+    initVisit();
+    document.getElementById('v_patientId').value = '';
+    document.getElementById('v_id').value = '';
+    document.getElementById('v_patientInfo').style.display = 'none';
+    document.getElementById('v_paid').value = '';
+  } catch(e) { showToast('خطأ في الحفظ', 'error'); }
+
+  btn.disabled = false;
+  btn.textContent = '💾 حفظ الزيارة';
+}
+
+// APPOINTMENTS
+async function loadPatientForAppt() {
+  const id = document.getElementById('a_patientId').value.trim();
+  if (!id) return;
+  try {
+    const res = await fetch(`${SCRIPT}?action=getPatient&id=${id}`);
+    const json = await res.json();
+    if (json.success) {
+      document.getElementById('a_patientName2').textContent = json.data['اسم المريض'];
+      document.getElementById('a_patientPhone2').textContent = json.data['رقم التليفون'];
+      document.getElementById('a_patientInfo').style.display = 'block';
+    } else { showToast('المريض غير موجود', 'error'); }
+  } catch(e) { showToast('خطأ في البحث', 'error'); }
+}
+
+async function saveAppointment() {
+  const patientId = document.getElementById('a_patientId').value.trim();
+  const date = document.getElementById('a_date').value;
+  const time = document.getElementById('a_time').value;
+  const patientName = document.getElementById('a_patientName2').textContent;
+  const phone = document.getElementById('a_patientPhone2').textContent;
+
+  if (!patientId || !date || !time) {
+    showToast('برجاء ملء الحقول المطلوبة', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('saveApptBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الحفظ...';
+
+  try {
+    await fetch(SCRIPT, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'addAppointment',
+        patientId, patientName, phone,
+        appointmentDate: date, appointmentTime: time,
+        notes: document.getElementById('a_notes').value
+      })
+    });
+    showToast('تم حفظ الموعد ✓');
+    document.getElementById('a_patientId').value = '';
+    document.getElementById('a_date').value = '';
+    document.getElementById('a_time').value = '';
+    document.getElementById('a_notes').value = '';
+    document.getElementById('a_patientInfo').style.display = 'none';
+    loadAllAppointments();
+  } catch(e) { showToast('خطأ في الحفظ', 'error'); }
+
+  btn.disabled = false;
+  btn.textContent = '💾 حفظ الموعد';
+}
+
+async function loadAllAppointments() {
+  try {
+    const res = await fetch(`${SCRIPT}?action=getAppointments`);
+    const json = await res.json();
+    if (json.success) renderAllAppts(json.data);
+  } catch(e) {}
+}
+
+function renderAllAppts(appts) {
+  const container = document.getElementById('allApptList');
+  if (!appts.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">📅</div>لا توجد مواعيد</div>'; return; }
+  const sorted = appts.sort((a,b) => new Date(b['تاريخ الموعد']) - new Date(a['تاريخ الموعد']));
+  container.innerHTML = sorted.map((a, i) => `
+    <div class="appt-item">
+      <div class="appt-header">
+        <div class="appt-name">${a['اسم المريض']}</div>
+        <div class="appt-time">${new Date(a['تاريخ الموعد']).toLocaleDateString('ar-EG')} - ${a['وقت الموعد']}</div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text2);margin-bottom:8px">📞 ${a['رقم التليفون']}</div>
+      <div class="appt-details">
+        <span class="badge ${a['تأكيد الموعد']==='مؤكد'?'badge-confirmed':'badge-unconfirmed'}">${a['تأكيد الموعد']}</span>
+        <span class="badge ${a['تم الرد']==='تم الرد'?'badge-replied':'badge-unreplied'}">${a['تم الرد']}</span>
+        <span class="badge ${a['حضور المريض']==='حضر'?'badge-attended':a['حضور المريض']==='لم يحضر'?'badge-absent':'badge-pending'}">${a['حضور المريض']}</span>
+      </div>
+      <div class="appt-actions">
+        <button class="appt-btn" style="background:#dcfce7;color:var(--success)" onclick="updateAppt(${i},'confirmed',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">✓ تأكيد</button>
+        <button class="appt-btn" style="background:#dbeafe;color:var(--accent)" onclick="updateAppt(${i},'replied',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">📞 رد</button>
+        <button class="appt-btn" style="background:#dcfce7;color:var(--success)" onclick="updateAppt(${i},'attended',true,'${a['كود المريض']}','${a['تاريخ الموعد']}')">✅ حضر</button>
+        <button class="appt-btn" style="background:#fee2e2;color:var(--danger)" onclick="updateAppt(${i},'attended',false,'${a['كود المريض']}','${a['تاريخ الموعد']}')">❌ غاب</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// PATIENTS LIST
+async function loadPatientsList() {
+  try {
+    const res = await fetch(`${SCRIPT}?action=getPatients`);
+    const json = await res.json();
+    if (json.success) {
+      allPatients = json.data;
+      renderPatients(json.data);
+    }
+  } catch(e) {}
+}
+
+function renderPatients(list) {
+  const container = document.getElementById('patientsList');
+  if (!list.length) { container.innerHTML = '<div class="empty"><div class="empty-icon">👥</div>لا يوجد مرضى</div>'; return; }
+  container.innerHTML = list.map(p => `
+    <div class="patient-item" onclick="showPatientModal('${p['كود المريض']}')">
+      <div class="patient-avatar">${(p['اسم المريض']||'?')[0]}</div>
+      <div class="patient-info">
+        <h3>${p['اسم المريض']}</h3>
+        <p>📞 ${p['رقم التليفون']}</p>
+      </div>
+      <div class="patient-code">${p['كود المريض']}</div>
+    </div>
+  `).join('');
+}
+
+function filterPatients(q) {
+  const filtered = allPatients.filter(p =>
+    (p['اسم المريض']||'').includes(q) ||
+    (p['كود المريض']||'').toString().includes(q) ||
+    (p['رقم التليفون']||'').includes(q)
+  );
+  renderPatients(filtered);
+}
+
+// PATIENT MODAL
+async function showPatientModal(id) {
+  const patient = allPatients.find(p => p['كود المريض'] == id);
+  if (!patient) return;
+
+  document.getElementById('modalPatientName').textContent = patient['اسم المريض'];
+  document.getElementById('modalPatientInfo').innerHTML = `
+    <div class="info-row"><span class="info-label">الكود</span><span class="info-value">${patient['كود المريض']}</span></div>
+    <div class="info-row"><span class="info-label">التليفون</span><span class="info-value">${patient['رقم التليفون']}</span></div>
+    <div class="info-row"><span class="info-label">النوع</span><span class="info-value">${patient['النوع']||'-'}</span></div>
+    <div class="info-row"><span class="info-label">العنوان</span><span class="info-value">${patient['العنوان']||'-'}</span></div>
+    <div class="info-row"><span class="info-label">المشاكل الصحية</span><span class="info-value">${patient['المشاكل الصحية']||'-'}</span></div>
+    <div class="info-row"><span class="info-label">طريقة المعرفة</span><span class="info-value">${patient['طريقة معرفة العيادة']||'-'}</span></div>
+  `;
+
+  document.getElementById('modalVisitHistory').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  document.getElementById('patientModal').classList.add('show');
+
+  try {
+    const res = await fetch(`${SCRIPT}?action=getVisits&patientId=${id}`);
+    const json = await res.json();
+    if (json.success && json.data.length) {
+      document.getElementById('modalVisitHistory').innerHTML = json.data.map(v => `
+        <div class="visit-item">
+          <div class="visit-header">
+            <div class="visit-date">${v['تاريخ الزيارة']||'-'} • ${v['الدكتور']||''}</div>
+            <div class="visit-total">${v['إجمالي']||0} جنيه</div>
+          </div>
+          <div class="visit-services">${[v['الخدمة 1'],v['الخدمة 2'],v['الخدمة 3']].filter(Boolean).join(' - ')}</div>
+          <div style="display:flex;gap:8px;margin-top:6px;font-size:0.78rem">
+            <span style="color:var(--success)">✓ دفع: ${v['المدفوع']||0}</span>
+            <span style="color:var(--danger)">متبقي: ${v['المتبقي']||0}</span>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('modalVisitHistory').innerHTML = '<div class="empty">لا توجد زيارات</div>';
+    }
+  } catch(e) {}
+}
+
+function closeModal() {
+  document.getElementById('patientModal').classList.remove('show');
+}
+
+// INIT
+loadDashboard();
+initVisit();
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('v_date').value = today;
+</script>
+</body>
+</html>
